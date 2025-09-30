@@ -43,9 +43,6 @@ We are using USB serial port.
 | Read (9 byte) |  |  |  |  |  |  |  |  |
 |  |  |  | On/off startup animation  | On/off when PC is off |  |  |  |  |
 | FF  | DC  |  | 08 00: on  | 00 : off  | 0  | 0  | 0  | 0 |
-
-The HYTE CNVS Protocol is provided under the terms of the GNU General Public License version 2\. 
-
 |  |  |  | 01: off  | 01 : on |  |  |  |  |
 | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
 
@@ -67,7 +64,6 @@ CNVS LED layout.
 <img width="621" height="163" alt="image" src="https://github.com/user-attachments/assets/adf0c0c8-0925-4597-9f21-5f5cbd57f1b4" />
 
 
-The HYTE CNVS Protocol is provided under the terms of the GNU General Public License version 2\. 
-
+The HYTE CNVS Protocol is provided under the terms of the GNU General Public License version 2\. All docs are from Hyte. I am not affiliated with Hyte in any way. 
 
 
