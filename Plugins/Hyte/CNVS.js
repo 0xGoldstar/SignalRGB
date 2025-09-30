@@ -2,7 +2,7 @@ import serial from "@SignalRGB/serial";
 
 export function Name() { return "HYTE CNVS"; }
 export function Type() { return "serial"; }
-export function Publisher() { return "Someone"; }
+export function Publisher() { return "0xGoldstar"; }
 export function Size() { return [22, 7]; }
 export function DefaultPosition() { return [50, 50]; }
 export function DefaultScale() { return 1.0; }
@@ -160,3 +160,4 @@ function hexToRgb(hex) {
 export function ImageUrl() {
     return "https://i.imgur.com/yknEGHA.png";
 }
+
