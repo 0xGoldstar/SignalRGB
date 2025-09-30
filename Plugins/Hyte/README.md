@@ -44,7 +44,6 @@ We are using USB serial port.
 |  |  |  | On/off startup animation  | On/off when PC is off |  |  |  |  |
 | FF  | DC  |  | 08 00: on  | 00 : off  | 0  | 0  | 0  | 0 |
 |  |  |  | 01: off  | 01 : on |  |  |  |  |
-| :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
 
 7\. Streaming command (our CNVS contains 50 LEDs) 
 
