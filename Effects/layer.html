@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>layer</title>
+  <meta property="color1" label="Color 1" type="color" min="0" max="360" default="#ff0000"/>
+  <meta property="color2" label="Color 2" type="color" min="0" max="360" default="#0000ff"/>
+  <meta property="layers" label="Number of Layers" type="number" min="1" max="10" default="5"/>
+  <meta property="speed" label="Speed" type="number" min="1" max="100" default="50"/>
+  <style>
+    body { margin: 0; padding: 0; background: black; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="320" height="200"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Initialize variables
+    let path = [];
+    let index = 0;
+    let direction = 1; // 1 = forward, -1 = backward
+    let moveX = 0;
+    let currentColor = '';
+    
+    function draw() {
+      //const color1 = document.querySelector('meta[property="color1"]').getAttribute('content') || '#ff0000';
+      //const color2 = document.querySelector('meta[property="color2"]').getAttribute('content') || '#0000ff';
+      //const layers = parseInt(document.querySelector('meta[property="layers"]').getAttribute('content') || '5');
+      //const speed = parseInt(document.querySelector('meta[property="speed"]').getAttribute('content') || '50');
+      
+      // Recalculate path if layers change
+      const squareSize = canvas.height / layers;
+      const cols = Math.ceil(canvas.width / squareSize);
+      
+      // Check if we need to regenerate the path (e.g. if layers changed)
+      if (path.length === 0 || path.length !== layers * cols) {
+        // Clear the canvas first
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        path = [];
+        for (let row = 0; row < layers; row++) {
+          for (let col = 0; col < cols; col++) {
+            const actualCol = row % 2 === 0 ? col : cols - 1 - col;
+            path.push({ x: actualCol * squareSize, y: canvas.height - (row + 1) * squareSize });
+          }
+        }
+        
+        // Reset position
+        index = 0;
+        direction = 1;
+        currentColor = color1;
+        moveX = path[0].x;
+      }
+      
+      // Set the color if not set
+      if (!currentColor) {
+        currentColor = color1;
+      }
+      
+      const delay = Math.max(1, 1000 / speed);
+      const movementSpeed = squareSize * 0.1;
+      
+      const target = path[index];
+      const targetX = target.x;
+      
+      if (Math.abs(moveX - targetX) > movementSpeed) {
+        moveX += (targetX - moveX) > 0 ? movementSpeed : -movementSpeed;
+      } else {
+        moveX = targetX;
+      }
+      
+      const y = target.y;
+      
+      ctx.fillStyle = currentColor;
+      ctx.fillRect(moveX, y, squareSize, squareSize);
+      
+      if (moveX === targetX) {
+        index += direction;
+      }
+      
+      // If we reach the end or beginning, reverse direction and swap color
+      if (index >= path.length || index < 0) {
+        direction *= -1;
+        index += direction;
+        currentColor = (currentColor === color1) ? color2 : color1;
+      }
+      
+      // Request the next frame after a delay
+      setTimeout(() => requestAnimationFrame(draw), delay);
+    }
+    
+    // Start the animation loop
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>
