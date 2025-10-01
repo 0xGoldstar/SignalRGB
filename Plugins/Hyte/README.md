@@ -1,6 +1,6 @@
 # HYTE CNVS Plugin
 
-This guide provides the prerequisites and troubleshooting steps for setting up and resolving common issues with the CNVS software.
+This guide provides the prerequisites and troubleshooting steps for setting up and resolving common issues with the CNVS.
 
 ## Prerequisites
 
