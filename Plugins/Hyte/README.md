@@ -1,3 +1,38 @@
+# HYTE CNVS Plugin
+
+This guide provides the prerequisites and troubleshooting steps for setting up and resolving common issues with the CNVS software.
+
+## Prerequisites
+
+Before installing or using the CNVS software, ensure the following steps are completed to avoid compatibility issues:
+
+- **Uninstall Hyte Bridge Software**: Completely remove the Hyte Bridge software, including any associated plugins and QML files, to prevent conflicts.
+- **Uninstall Hyte Nexus Software**: Ensure the Hyte Nexus software is fully uninstalled before proceeding with the CNVS setup.
+
+## Installation 
+
+- Download the plugin to `Documents > WhirlwindFX > plugins`
+- Restart SignalRGB
+- The CNVS now should be detected automatically
+
+## Troubleshooting
+
+### CNVS Flickering
+- **Issue**: The CNVS flickers. 
+- **Solution**: 
+  - Connect the CNVS device directly to a USB port on your computer.
+  - Avoid using USB hubs, as they may cause power or connection instability.
+
+### SignalRGB Not Detecting CNVS
+- **Issue**: SignalRGB fails to detect the CNVS device.
+- **Solution**:
+  1. Ensure the required plugin is correctly installed in the following directory:  
+     `Documents > WhirlwindFX > Plugins`.
+  2. If the plugin is missing or misplaced, reinstall it to the specified folder.
+  3. If you are using OneDrive, uninstall it, as it may interfere with file pathing and cause detection issues.
+
+---
+
 # HYTE CNVS Protocol Document V1.0 
 
 2023/06/30 
