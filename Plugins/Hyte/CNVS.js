@@ -7,7 +7,7 @@ export function Size() { return [22, 7]; }
 export function DefaultPosition() { return [50, 50]; }
 export function DefaultScale() { return 1.0; }
 export function VendorId() { return 0x3402; }
-export function ProductId() { return 0x0B00; }
+export function ProductId() { return [0x0B00, 0x0B01]; }
 
 export function ControllableParameters() {
     return [
@@ -160,4 +160,5 @@ function hexToRgb(hex) {
 export function ImageUrl() {
     return "https://i.imgur.com/yknEGHA.png";
 }
+
 
