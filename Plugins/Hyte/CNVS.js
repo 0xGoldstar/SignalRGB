@@ -1,20 +1,24 @@
 import serial from "@SignalRGB/serial";
-
 export function Name() { return "HYTE CNVS"; }
-export function Type() { return "serial"; }
-export function Publisher() { return "0xGoldstar"; }
-export function Size() { return [22, 7]; }
-export function DefaultPosition() { return [50, 50]; }
-export function DefaultScale() { return 1.0; }
 export function VendorId() { return 0x3402; }
 export function ProductId() { return [0x0B00, 0x0B01]; }
-
-export function ControllableParameters() {
-    return [
-        { property: "shutdownColor", group: "lighting", label: "Shutdown Color", type: "color", default: "#000000" },
-        { property: "LightingMode", group: "lighting", label: "Lighting Mode", type: "combobox", values: ["Canvas", "Forced"], default: "Canvas" },
-        { property: "forcedColor", group: "lighting", label: "Forced Color", type: "color", default: "#FFFFFF" }
-    ];
+export function Publisher() { return "0xGoldstar"; }
+export function Documentation(){ return "troubleshooting/hyte"; }
+export function Size() { return [22, 7]; }
+export function Type() { return "serial"; }
+export function DeviceType(){return "mousepad";}
+export function ImageUrl() { return "https://assets.signalrgb.com/devices/brands/hyte/mousepads/cnvs.png"; }
+/* global
+shutdownColor:readonly
+LightingMode:readonly
+forcedColor:readonly
+*/
+export function ControllableParameters(){
+	return [
+		{property:"shutdownColor", group:"lighting", label:"Shutdown Color", description: "This color is applied to the device when the System, or SignalRGB is shutting down", min:"0", max:"360", type:"color", default:"#000000"},
+		{property:"LightingMode", group:"lighting", label:"Lighting Mode", description: "Determines where the device's RGB comes from. Canvas will pull from the active Effect, while Forced will override it to a specific color", type:"combobox", values:["Canvas", "Forced"], default:"Canvas"},
+		{property:"forcedColor", group:"lighting", label:"Forced Color", description: "The color used when 'Forced' Lighting Mode is enabled", min:"0", max:"360", type:"color", default:"#009bde"},
+	];
 }
 
 const vLedPositions = [
@@ -59,10 +63,33 @@ export function Initialize() {
     connectToCNVS();
 }
 
+// renders colors
+export function Render() {
+    // automatic reconnect if disconnected
+    if (!serial.isConnected()) {
+        console.log("Serial port not connected, attempting reconnect...");
+        connectToCNVS();
+    }
+
+    sendColors();
+}
+
+// shut down colors
+export function Shutdown(SystemSuspending) {
+    if (!cnvsPortName) return;
+
+    const color = SystemSuspending ? "#000000" : shutdownColor;
+
+    serial.write([0xFF, 0xDC, 0x08]);
+    sendColors(color);
+
+    disconnect();
+}
+
 function connectToCNVS() {
     if (!cnvsPortName) return false;
 
-    if (serial.isConnected(cnvsPortName)) return true;
+    if (serial.isConnected()) return true;
 
     const connected = serial.connect({
         portName: cnvsPortName,
@@ -87,40 +114,17 @@ function connectToCNVS() {
     return true;
 }
 
-// renders colors
-export function Render() {
-    // automatic reconnect if disconnected
-    if (!serial.isConnected(cnvsPortName)) {
-        console.log("Serial port not connected, attempting reconnect...");
-        connectToCNVS();
-    }
-
-    grabColors();
-}
-
-// shut down colors
-export function Shutdown(suspend) {
-    if (!cnvsPortName) return;
-
-    // supposed to be shutdown but I'm not sure if this works
-    serial.write([0xFF, 0xDC, 0x08]);
-
-    grabColors(true);
-
-    disconnect();
-}
-
 function disconnect() {
-    if (serial.isConnected(cnvsPortName)) {
+    if (serial.isConnected()) {
         serial.disconnect();
         console.log("Disconnected from serial port");
     }
 }
 
 // grabs colors and sends
-function grabColors(shutdown = false) {
+function sendColors(overrideColor) {
     if (!cnvsPortName) return;
-    if (!serial.isConnected(cnvsPortName)) {
+    if (!serial.isConnected()) {
         console.warn("Serial port not connected, skipping color write");
         return;
     }
@@ -131,7 +135,7 @@ function grabColors(shutdown = false) {
         const [x, y] = vLedPositions[i];
         let color;
 
-        if (shutdown) color = hexToRgb(shutdownColor);
+        if (overrideColor) color = hexToRgb(shutdownColor);
         else if (LightingMode === "Forced") color = hexToRgb(forcedColor);
         else color = device.color(x, y);
 
@@ -156,9 +160,3 @@ function hexToRgb(hex) {
         parseInt(result[3], 16)
     ];
 }
-
-export function ImageUrl() {
-    return "https://i.imgur.com/yknEGHA.png";
-}
-
-
